@@ -1,0 +1,102 @@
+Friends Store – Project Requirements
+====================================
+
+1. Overview
+-----------
+- Modern artificial-plant storefront built with Vite + React + TypeScript.
+- Supabase provides authentication, Postgres data, storage, and edge functions.
+- Admin experience handled inside `/kirtanuk` routes with Supabase RLS.
+
+2. Core Features
+----------------
+- Public catalog with product detail, carousel, trust badges, and related items.
+- Real-time product data (`products` table) including price, original price, tags, features, images.
+- Admin dashboard supporting:
+  - Orders list with status filter, grouped cards, contextual badges.
+  - Manual order creation (customer info, line items, notes).
+  - Detail dialog per order with product lines, totals, and delete action.
+  - Customer profiles, reviews management, and storage bucket for product images.
+- Customer review widget with star summary, decimal rating input (rounded for storage), edit/delete for owner, and styled empty/loading states.
+
+3. Supabase Configuration
+-------------------------
+- Tables: `products`, `orders`, `order_items`, `customer_profiles`, `reviews`, `user_roles`, `admin_emails`.
+- Enums: `app_role`, `order_status`.
+- Functions/Triggers: `update_updated_at_column`, `generate_order_number`, `handle_new_customer`, `handle_new_user_admin_role`.
+- Storage bucket `product-images` with RLS (public read, admin write).
+- RLS relies on `user_roles` and `has_role()` helper.
+- Admin onboarding:
+  1. Insert email into `admin_emails`.
+  2. Create Supabase auth user (through UI or signup page).
+  3. Trigger grants `admin` role automatically.
+
+4. Environment Variables
+------------------------
+Frontend (`.env` or hosting dashboard):
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
+- `VITE_SEND_ORDER_EMAIL_URL` (full invoke URL of edge function)
+
+Supabase project (Functions → Config Vars):
+- `SMTP_HOST`
+- `SMTP_PORT` (e.g., 587)
+- `SMTP_USER`
+- `SMTP_PASS` (app password)
+- `SMTP_FROM_EMAIL`
+
+5. Edge Function: `send-order-email`
+------------------------------------
+- Located at `supabase/functions/send-order-email/index.ts`.
+- Sends transactional emails for every order status change and manual creation.
+- Uses `denomailer` SMTP client with HTML template (Friends Store header, summary table, WhatsApp note).
+- Payload includes customer info, order number, status, items, total.
+- Deployment via Supabase dashboard (“Deploy a new function” → paste code) or CLI (`supabase functions deploy send-order-email`).
+
+6. Frontend Order Flow
+----------------------
+- `AdminOrders.tsx`:
+  - Uses React Query to fetch/update orders and line items.
+  - Status dropdown invalidates query and calls `notifyOrderStatusChange`.
+  - Order creation sidebar calculates totals, inserts items, and triggers confirmation email.
+  - Detail dialog fetches `order_items` to show quantities, per-unit price, and totals.
+  - Delete order button with confirmation and cascade removal.
+
+7. Review Section UI
+--------------------
+- Component: `src/components/ReviewSection.tsx`.
+- Features:
+  - Summary header with review count and description.
+  - Styled list of reviews, star icons, owner controls.
+  - Form uses clickable stars + numeric input (supports decimals, rounded before save).
+  - Utilizes Shadcn `Button`, `Label`, `Textarea`.
+
+8. Deployment Steps
+-------------------
+Backend / Supabase:
+1. Create project, run SQL migrations (`supabase/migrations/` or SQL editor).
+2. Configure env vars (Section 4).
+3. Deploy `send-order-email` function.
+4. Seed `admin_emails` and `products` if needed.
+
+Frontend:
+1. `bun install` (or `npm install`).
+2. Provide `.env` with Vite variables.
+3. `bun run dev` for local development.
+4. `bun run build` then deploy to hosting (e.g., Vercel, Netlify, Lovable).
+
+9. Testing & Verification
+-------------------------
+- After deployments, verify:
+  - Admin signup and login flow via `/signup` and `/login`.
+  - Orders page: creation, status transitions, deletion, dialog details.
+  - Email delivery for `received`, `dispatched`, `completed`, `returned`, `cancelled`.
+  - Review submissions, edits, deletes; product rating averages update.
+- Use browser devtools Network tab to ensure `send-order-email` returns 200.
+
+10. Future Enhancements (Optional)
+----------------------------------
+- Add customer-visible order history tied to `customer_profiles`.
+- Surface reviewer display names instead of raw UUIDs.
+- Add pagination / infinite scroll for large review sets.
+- Integrate payment gateway and inventory syncing.
+

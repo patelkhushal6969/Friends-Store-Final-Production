@@ -1,0 +1,252 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Friends Store - Plant-themed Design System */
+
+@layer base {
+  :root {
+    /* Core Plant Palette */
+    --background: 85 20% 97%;
+    --foreground: 150 30% 15%;
+
+    --card: 85 25% 95%;
+    --card-foreground: 150 30% 15%;
+
+    --popover: 85 20% 97%;
+    --popover-foreground: 150 30% 15%;
+
+    /* Primary - Deep Sage Green */
+    --primary: 150 25% 30%;
+    --primary-foreground: 85 20% 97%;
+
+    /* Secondary - Warm Cream */
+    --secondary: 45 30% 92%;
+    --secondary-foreground: 150 30% 15%;
+
+    /* Muted - Light Sage */
+    --muted: 120 15% 90%;
+    --muted-foreground: 150 15% 45%;
+
+    /* Accent - Terracotta */
+    --accent: 18 50% 55%;
+    --accent-foreground: 85 20% 97%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 120 15% 85%;
+    --input: 120 15% 85%;
+    --ring: 150 25% 30%;
+
+    --radius: 0.75rem;
+
+    /* Custom Design Tokens */
+    --leaf: 130 35% 45%;
+    --leaf-light: 130 25% 75%;
+    --cream: 45 40% 95%;
+    --bark: 30 25% 25%;
+    --moss: 95 30% 40%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(85 20% 97%) 0%, hsl(120 20% 94%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(85 25% 96%) 0%, hsl(85 20% 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(150 25% 30%) 0%, hsl(130 35% 45%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(150 25% 30% / 0.08);
+    --shadow-card: 0 8px 30px -8px hsl(150 25% 30% / 0.12);
+    --shadow-elevated: 0 20px 50px -12px hsl(150 25% 30% / 0.15);
+
+    /* Typography */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'DM Sans', sans-serif;
+
+    /* Sidebar */
+    --sidebar-background: 85 20% 97%;
+    --sidebar-foreground: 150 30% 15%;
+    --sidebar-primary: 150 25% 30%;
+    --sidebar-primary-foreground: 85 20% 97%;
+    --sidebar-accent: 120 15% 90%;
+    --sidebar-accent-foreground: 150 30% 15%;
+    --sidebar-border: 120 15% 85%;
+    --sidebar-ring: 150 25% 30%;
+  }
+
+  .dark {
+    --background: 150 30% 8%;
+    --foreground: 85 20% 95%;
+
+    --card: 150 25% 12%;
+    --card-foreground: 85 20% 95%;
+
+    --popover: 150 25% 10%;
+    --popover-foreground: 85 20% 95%;
+
+    --primary: 130 35% 55%;
+    --primary-foreground: 150 30% 8%;
+
+    --secondary: 150 20% 18%;
+    --secondary-foreground: 85 20% 95%;
+
+    --muted: 150 20% 18%;
+    --muted-foreground: 120 15% 60%;
+
+    --accent: 18 45% 50%;
+    --accent-foreground: 85 20% 97%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 150 20% 20%;
+    --input: 150 20% 20%;
+    --ring: 130 35% 55%;
+
+    --leaf: 130 40% 50%;
+    --leaf-light: 130 25% 35%;
+    --cream: 45 20% 15%;
+    --bark: 30 20% 70%;
+    --moss: 95 35% 50%;
+
+    --sidebar-background: 150 30% 8%;
+    --sidebar-foreground: 85 20% 95%;
+    --sidebar-primary: 130 35% 55%;
+    --sidebar-primary-foreground: 150 30% 8%;
+    --sidebar-accent: 150 20% 18%;
+    --sidebar-accent-foreground: 85 20% 95%;
+    --sidebar-border: 150 20% 20%;
+    --sidebar-ring: 130 35% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+  }
+
+  .bg-hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .bg-card-gradient {
+    background: var(--gradient-card);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out 2s infinite;
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1;
+    box-shadow: var(--shadow-elevated);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom cursor: desktop-only green leaf (normal) and brown leaf (hover) */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: url('/assets/cursor/leaf-normal-40.png') 8 8, auto;
+  }
+
+  a:hover,
+  button:hover,
+  input:hover,
+  [role="button"]:hover {
+    cursor: url('/assets/cursor/leaf-hover-48.png') 8 8, auto;
+  }
+}
+
+/* Fallback: keep default cursor on touch devices (mobile) */
+
+/* Temporary testing rule removed — now using appropriately-sized cursor images. */
